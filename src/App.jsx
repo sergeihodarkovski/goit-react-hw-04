@@ -6,6 +6,7 @@ import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const [photos, setPhotos] = useState([]);
@@ -13,11 +14,12 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [query, setQuery] = useState("nature");
+  const [query, setQuery] = useState();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
+    if (!query) return;
     const getData = async () => {
       setLoading(true);
       setError(null);
@@ -63,7 +65,6 @@ const App = () => {
 
   return (
     <>
-      <h1>Фото из Unsplash</h1>
       <SearchBar onSubmit={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMessage message={error} />}
@@ -75,6 +76,7 @@ const App = () => {
       {isModalOpen && selectedImage && (
         <ImageModal photo={selectedImage} onClose={closeModal} />
       )}
+      <Toaster />
     </>
   );
 };
