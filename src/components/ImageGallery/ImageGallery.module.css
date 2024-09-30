@@ -1,0 +1,31 @@
+.imageGallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 10px;
+}
+
+.imageCard {
+  margin: 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.image {
+  width: 50px;
+  height: 150px;
+  border: 2px solid black;
+  overflow: hidden;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.image:hover {
+  transform: scale(1.05);
+}

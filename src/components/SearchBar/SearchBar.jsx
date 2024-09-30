@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import s from "./SearchBar.module.css";
 
 const SearchBar = ({ onSubmit }) => {
@@ -7,7 +8,7 @@ const SearchBar = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim() === "") {
-      alert("Введите текст для поиска");
+      toast.error("Введите текст для поиска!");
       return;
     }
     onSubmit(inputValue);

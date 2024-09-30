@@ -5,9 +5,12 @@ import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
+import ImageModal from "./components/ImageModal/ImageModal";
 
 const App = () => {
   const [photos, setPhotos] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("nature");
@@ -20,7 +23,12 @@ const App = () => {
       setError(null);
       try {
         const data = await fetchFotos(query, page);
-        setPhotos((prevPhotos) => [...prevPhotos, ...data.results]);
+
+        if (page === 1) {
+          setPhotos(data.results);
+        } else {
+          setPhotos((prevPhotos) => [...prevPhotos, ...data.results]);
+        }
         setTotalPages(data.total_pages);
       } catch (err) {
         setError("Ошибка при загрузке изображений");
@@ -43,15 +51,29 @@ const App = () => {
     }
   };
 
+  const handleImageClick = (photo) => {
+    setSelectedImage(photo);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <h1>Фото из Unsplash</h1>
       <SearchBar onSubmit={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMessage message={error} />}
-      <ImageGallery photos={photos} />
+      <ImageGallery photos={photos} onImageClick={handleImageClick} />
       {photos.length > 0 && page < totalPages && (
         <LoadMoreBtn onClick={loadMorePhotos} />
+      )}
+
+      {isModalOpen && selectedImage && (
+        <ImageModal photo={selectedImage} onClose={closeModal} />
       )}
     </>
   );
